@@ -32,6 +32,11 @@ def devnull():
     return open(os.devnull, 'w')
 
 
+def get_sound_path(filename):
+    my_dir = os.path.dirname(__file__)
+    return os.path.join(my_dir, 'sounds', filename)
+
+
 def loop_file(path, delay=1):
     in_file = wave.open(path)
 
