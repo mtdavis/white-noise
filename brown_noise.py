@@ -6,10 +6,10 @@ import noise
 
 
 class BrownNoise(noise.Noise):
-    def play_noise(self, wave_out):
+    def run(self):
         my_dir = os.path.dirname(__file__)
         path = os.path.join(my_dir, 'brown-noise.wav')
-        self.loop_file(wave_out, path)
+        noise.loop_file(path, delay=1.33)
 
 
 if __name__ == '__main__':

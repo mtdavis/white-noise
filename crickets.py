@@ -1,16 +1,37 @@
 #!/usr/bin/env python
 
+import multiprocessing
 import os
+import random
+import time
 
 import noise
 
 
 class Crickets(noise.Noise):
-    def play_noise(self, wave_out):
+    def run(self):
         my_dir = os.path.dirname(__file__)
-        path = os.path.join(my_dir, 'crickets.wav')
-        self.loop_file(wave_out, path)
+        cricket_loop = os.path.join(my_dir, 'cricket-loop.wav')
 
+        procs = []
+        procs.append(multiprocessing.Process(
+            target=noise.loop_file, args=(cricket_loop,), kwargs={'delay': 1.1}
+        ))
+
+        for x in [1, 2, 3]:
+            path = os.path.join(my_dir, 'cricket-{}.wav'.format(x))
+            procs.append(multiprocessing.Process(target=self.random_crickets, args=(path,)))
+
+        for proc in procs:
+            proc.start()
+
+        for proc in procs:
+            proc.join()
+
+    def random_crickets(self, path):
+        while True:
+            time.sleep(random.random() * 15)
+            noise.play_file(path)
 
 if __name__ == '__main__':
     Crickets().run()
