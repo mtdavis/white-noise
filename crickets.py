@@ -5,12 +5,12 @@ import os
 import noise
 
 
-class BrownNoise(noise.Noise):
+class Crickets(noise.Noise):
     def play_noise(self, wave_out):
         my_dir = os.path.dirname(__file__)
-        path = os.path.join(my_dir, 'brown-noise.wav')
+        path = os.path.join(my_dir, 'crickets.wav')
         self.loop_file(wave_out, path)
 
 
 if __name__ == '__main__':
-    BrownNoise().run()
+    Crickets().run()

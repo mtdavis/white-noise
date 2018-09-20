@@ -1,3 +1,5 @@
+from __future__ import division
+
 import os
 import subprocess
 import wave
@@ -21,12 +23,6 @@ class FileWrapper(object):
 
 
 class Noise(object):
-    def __init__(self, nchannels=1, sampwidth=2, framerate=44100, nframes=0):
-        self.nchannels = nchannels
-        self.sampwidth = sampwidth
-        self.framerate = framerate
-        self.nframes = nframes
-
     def run(self):
         devnull = open(os.devnull, 'w')
         while True:
@@ -38,15 +34,28 @@ class Noise(object):
 
             wave_out = wave.open(FileWrapper(aplay_proc.stdin), 'wb')
 
-            wave_out.setnchannels(self.nchannels)
-            wave_out.setsampwidth(self.sampwidth)
-            wave_out.setframerate(self.framerate)
-            wave_out.setnframes(self.nframes)
-
             self.play_noise(wave_out)
 
             aplay_proc.wait()
 
-
     def play_noise(self, wave_out):
         raise NotImplemented
+
+    def loop_file(self, wave_out, path):
+        in_file = wave.open(path)
+
+        framerate = in_file.getframerate()
+        source_nframes = in_file.getnframes()
+        source_duration = source_nframes / framerate
+        loop_count = int(4 * 60 * 60 / source_duration)
+        dest_nframes = loop_count * source_nframes
+
+        frames = in_file.readframes(source_nframes)
+
+        wave_out.setnchannels(in_file.getnchannels())
+        wave_out.setsampwidth(in_file.getsampwidth())
+        wave_out.setframerate(framerate)
+        wave_out.setnframes(dest_nframes)
+
+        for _ in range(loop_count):
+            wave_out.writeframesraw(frames)
