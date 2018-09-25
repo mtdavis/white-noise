@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import multiprocessing
+import os
 import random
 import time
 
@@ -32,4 +33,5 @@ class Crickets(noise.Noise):
             noise.play_file(path)
 
 if __name__ == '__main__':
+    os.setsid()
     Crickets().run()

@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+import os
+
 import noise
 
 
@@ -10,4 +12,5 @@ class BrownNoise(noise.Noise):
 
 
 if __name__ == '__main__':
+    os.setsid()
     BrownNoise().run()

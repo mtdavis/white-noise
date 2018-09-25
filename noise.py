@@ -48,8 +48,7 @@ def loop_file(path, delay=1):
 
     # if you play a single file for more than 4-5 hours it starts sounding choppy,
     # so we'll loop the source for 4 hours, and then start a new aplay subprocess.
-    # loop_count = int(4 * 60 * 60 / source_duration)
-    loop_count = 1
+    loop_count = int(4 * 60 * 60 / source_duration)
     dest_nframes = loop_count * source_nframes
 
     frames = in_file.readframes(source_nframes)
